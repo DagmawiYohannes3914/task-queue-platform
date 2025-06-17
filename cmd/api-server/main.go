@@ -6,6 +6,7 @@ import (
 
 	"github.com/dagmawiyohannes3914/task-queue-platform/internal/config"
 	"github.com/dagmawiyohannes3914/task-queue-platform/internal/logger"
+	"github.com/dagmawiyohannes3914/task-queue-platform/internal/repository"
 	"github.com/go-chi/chi/v5"
 	"go.uber.org/zap"
 )
@@ -13,6 +14,7 @@ import (
 func main() {
 	config.LoadConfig()
 	logger.InitLogger()
+	repository.InitDB()
 	
 	r := chi.NewRouter()
 
