@@ -6,6 +6,7 @@ import (
 
 	"github.com/dagmawiyohannes3914/task-queue-platform/internal/logger"
 	"github.com/dagmawiyohannes3914/task-queue-platform/internal/models"
+	"github.com/dagmawiyohannes3914/task-queue-platform/internal/queue"
 	"github.com/dagmawiyohannes3914/task-queue-platform/internal/repository"
 	"github.com/go-chi/chi/v5"
 	"github.com/google/uuid"
@@ -56,6 +57,16 @@ func SubmitJobHandler(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		http.Error(w, "failed to create job", http.StatusInternalServerError)
 		return
+	}
+
+	event := map[string]interface{}{
+		"job_id": job.ID.String(),
+		
+	}
+	eventData, _ := json.Marshal(event)
+	err = queue.Publish("jobs.new", eventData)
+	if err != nil {
+		logger.Log.Error("failed to publish to NATS", zap.Error(err))
 	}
 
 	w.Header().Set("Content-Type", "application/json")
