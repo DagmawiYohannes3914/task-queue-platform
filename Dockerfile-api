@@ -1,0 +1,11 @@
+FROM golang:1.24.4 AS builder
+
+WORKDIR /app
+COPY . .
+
+RUN go build -o api-server ./cmd/api-server
+
+FROM debian:bookworm-slim
+WORKDIR /app
+COPY --from=builder /app/api-server .
+CMD ["./api-server"]

@@ -44,8 +44,12 @@ func SubmitJobHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	userID := r.Context().Value(UserIDContextKey).(uuid.UUID)
+
+
 	job := models.Job{
 		ID:         uuid.New(),
+		UserID:     userID,
 		Type:       req.Type,
 		Payload:    payloadJSON,
 		Status:     models.StatusPending,
