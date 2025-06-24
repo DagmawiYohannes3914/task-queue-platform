@@ -25,6 +25,11 @@ func main() {
 		w.Write([]byte("API Server is running"))
 	})
 
+	r.Route("/auth", func(r chi.Router){
+		r.Post("/register", api.RegisterHandler)
+		r.Post("/login", api.LoginHandler)
+	})
+
 	r.Route("/api", func(r chi.Router) {
 		r.Post("/jobs", api.SubmitJobHandler)
 		r.Get("/jobs/{id}", api.GetJobStatusHandler)
